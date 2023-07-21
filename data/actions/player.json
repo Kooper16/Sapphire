@@ -1544,7 +1544,19 @@
     "nextCombo": [],
     "statuses": {
       "caster": [],
-      "target": []
+      "target": [
+        {
+          "id": 124,
+          "duration": 18000,
+          "canApplyMultipleTimes": true,
+          "modifiers": [
+            {
+              "modifier": "TickDamage",
+              "value": 40
+            }
+          ]
+        }
+      ]
     }
   },
   "101": {
@@ -1751,7 +1763,19 @@
     "nextCombo": [],
     "statuses": {
       "caster": [],
-      "target": []
+      "target": [
+        {
+          "id": 129,
+          "duration": 18000,
+          "canApplyMultipleTimes": true,
+          "modifiers": [
+            {
+              "modifier": "TickDamage",
+              "value": 50
+            }
+          ]
+        }
+      ]
     }
   },
   "114": {
