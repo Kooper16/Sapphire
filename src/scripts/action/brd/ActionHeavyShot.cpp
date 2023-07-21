@@ -37,8 +37,8 @@ public:
     {
       uint32_t duration = 10000;
 
-      pSource->replaceSingleStatusEffectById( StraightShotReady );
-      action.getActionResultBuilder()->applyStatusEffectSelf( StraightShotReady, duration, 0 );
+      //pSource->replaceSingleStatusEffectById( StraightShotReady );
+      action.getActionResultBuilder()->applyStatusEffectSelf( StraightShotReady, duration, 0, true );
     }
 
   }

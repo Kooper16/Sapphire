@@ -622,7 +622,6 @@ void Action::Action::handleStatusEffects()
   {
     for( auto& status : m_lutEntry.statuses.caster )
     {
-      m_pSource->replaceSingleStatusEffectById( status.id );
       getActionResultBuilder()->applyStatusEffectSelf( status.id, status.duration, 0, status.modifiers, status.flag, true );
     }
   }

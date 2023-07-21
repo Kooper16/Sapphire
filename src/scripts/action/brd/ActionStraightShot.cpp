@@ -36,8 +36,8 @@ public:
 
 
     uint32_t duration = 20000;
-    pSource->replaceSingleStatusEffectById( StraightShotBuff );
-    action.getActionResultBuilder()->applyStatusEffectSelf( StraightShotBuff, duration, 0, { Sapphire::World::Action::StatusModifier{ Sapphire::Common::ParamModifier::CriticalHitPercent, 10 } }, 0, false );
+    //pSource->replaceSingleStatusEffectById( StraightShotBuff );
+    action.getActionResultBuilder()->applyStatusEffectSelf( StraightShotBuff, duration, 0, { Sapphire::World::Action::StatusModifier{ Sapphire::Common::ParamModifier::CriticalHitPercent, 10 } }, 0, true );
   }
 };
 
