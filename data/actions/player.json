@@ -1528,7 +1528,23 @@
     "restorePercentage": 0,
     "nextCombo": [],
     "statuses": {
-      "caster": [],
+      "caster": [
+        {
+          "id": 123,
+          "duration": 20000,
+          "canApplyMultipleTimes": false,
+          "modifiers": [
+            {
+              "modifier": "DexterityPercent",
+              "value": 115
+            },
+            {
+              "modifier": "AccuracyPercent",
+              "value": 100
+            }
+          ]
+        }
+      ],
       "target": []
     }
   },
@@ -1688,7 +1704,14 @@
     "nextCombo": [],
     "statuses": {
       "caster": [],
-      "target": []
+      "target": [
+        {
+          "id": 13,
+          "duration": 10000,
+          "flag": 256,
+          "canApplyMultipleTimes": false
+        }
+      ]
     }
   },
   "109": {
