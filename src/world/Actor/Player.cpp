@@ -1297,8 +1297,6 @@ void Player::autoAttack( CharaPtr pTarget )
 
   auto mainWeap = getItemAt( Common::GearSet0, Common::GearSetSlot::MainHand );
 
-  pTarget->onActionHostile( getAsChara(), 1 ); // todo: calculate aggro
-
   auto& RNGMgr = Common::Service< World::Manager::RNGMgr >::ref();
   auto variation = static_cast< uint32_t >( RNGMgr.getRandGenerator< float >( 0, 3 ).next() );
 

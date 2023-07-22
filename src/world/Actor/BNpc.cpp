@@ -527,6 +527,8 @@ void BNpc::hateListUpdate( const CharaPtr& pChara, int32_t hateAmount )
     {
       listEntry->m_hateAmount += static_cast< uint32_t >( hateAmount );
       hasEntry = true;
+
+      Manager::PlayerMgr::sendDebug( *pChara->getAsPlayer(), "Target aggro: {}", listEntry->m_hateAmount );
       break;
     }
   }
@@ -979,7 +981,6 @@ void BNpc::autoAttack( CharaPtr pTarget )
   // todo: this needs to use the auto attack delay for the equipped weapon
   if( ( tick - m_lastAttack ) > 2500 )
   {
-    pTarget->onActionHostile( getAsChara(), 1 ); // todo: Aggro Calculation
     m_lastAttack = tick;
     srand( static_cast< uint32_t >( tick ) );
     actionMgr.handleTargetedAction( *this, 7, pTarget->getId(), 0 );
