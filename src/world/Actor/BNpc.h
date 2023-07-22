@@ -119,7 +119,7 @@ namespace Sapphire::Entity
     void update( uint64_t tickCount ) override;
     void onTick() override;
 
-    void onActionHostile( CharaPtr pSource ) override;
+    void onActionHostile( CharaPtr pSource, int32_t hateAmount ) override;
 
     void onDeath() override;
 

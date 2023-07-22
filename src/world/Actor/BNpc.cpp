@@ -814,12 +814,12 @@ void BNpc::restHp()
   Network::Util::Packet::sendHudParam( *this );
 }
 
-void BNpc::onActionHostile( CharaPtr pSource )
+void BNpc::onActionHostile( CharaPtr pSource, int32_t hateAmount )
 {
   if( !hateListGetHighest() )
     aggro( pSource );
 
-  hateListUpdate( pSource, 1 );
+  hateListUpdate( pSource, hateAmount );
 
   if( !m_pOwner )
     setOwner( pSource );
@@ -979,7 +979,7 @@ void BNpc::autoAttack( CharaPtr pTarget )
   // todo: this needs to use the auto attack delay for the equipped weapon
   if( ( tick - m_lastAttack ) > 2500 )
   {
-    pTarget->onActionHostile( getAsChara() );
+    pTarget->onActionHostile( getAsChara(), 1 ); // todo: Aggro Calculation
     m_lastAttack = tick;
     srand( static_cast< uint32_t >( tick ) );
     actionMgr.handleTargetedAction( *this, 7, pTarget->getId(), 0 );

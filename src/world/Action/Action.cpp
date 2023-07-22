@@ -500,6 +500,19 @@ std::pair< uint32_t, Common::ActionHitSeverityType > Action::Action::calcHealing
   return Math::CalcStats::calcActionHealing( *m_pSource, potency, wepDmg );
 }
 
+int32_t Action::Action::calcDamageHate( Entity::CharaPtr source, uint32_t potency, uint32_t increasedEnmity /*= 1*/ )
+{
+  uint32_t hate = potency * increasedEnmity;
+  hate = hate * source->getModifier( Common::ParamModifier::EnmityPercent );
+
+  return hate;
+}
+
+int32_t Action::Action::calcHealingHate( Entity::CharaPtr source, uint32_t potency, bool isAbility )
+{
+  return 1;
+}
+
 void Action::Action::buildActionResults()
 {
   snapshotAffectedActors( m_hitActors );
@@ -546,8 +559,8 @@ void Action::Action::buildActionResults()
       auto dmg = calcDamage( isCorrectCombo() ? m_lutEntry.comboPotency : m_lutEntry.potency );
       m_actionResultBuilder->damage( m_pSource, actor, dmg.first, dmg.second );
 
-      if( dmg.first > 0 )
-        actor->onActionHostile( m_pSource );
+      auto hate = calcDamageHate( getSourceChara(), dmg.first );
+      actor->onActionHostile( m_pSource, hate );
 
       if( isCorrectCombo() && shouldApplyComboSucceedEffect )
       {
@@ -634,7 +647,7 @@ void Action::Action::handleStatusEffects()
       }
 
       if( actor->getStatusEffectMap().size() > 0 )
-        actor->onActionHostile( m_pSource );
+        actor->onActionHostile( m_pSource, 1 );
     }
   }
 }

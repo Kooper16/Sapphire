@@ -464,7 +464,7 @@ void Chara::autoAttack( CharaPtr pTarget )
   // todo: this needs to use the auto attack delay for the equipped weapon
   if( ( tick - m_lastAttack ) > 2500 )
   {
-    pTarget->onActionHostile( getAsChara() );
+    pTarget->onActionHostile( getAsChara(), 1 );
     m_lastAttack = tick;
     srand( static_cast< uint32_t >( tick ) );
 
@@ -776,19 +776,54 @@ void Chara::setStatValue( Common::BaseParam baseParam, uint32_t value )
 
 float Chara::getModifier( Common::ParamModifier paramModifier ) const
 {
-  auto result = paramModifier >= Common::ParamModifier::StrengthPercent ? 1.0f : 0;
+  float result = 0;
 
-  for( const auto& [ key, status ] : m_statusEffectMap )
+  // Multiplier that stacks additively
+  if( paramModifier == Common::ParamModifier::EnmityPercent )
   {
-    for( const auto& [ mod, val ] : status->getModifiers() )
-    {
-      if( mod != paramModifier )
-        continue;
+    result = 1;
 
-      if( paramModifier >= Common::ParamModifier::StrengthPercent )
+    for( const auto& [ key, status ] : m_statusEffectMap )
+    {
+      for( const auto& [ mod, val ] : status->getModifiers() )
+      {
+        if( mod != paramModifier )
+          continue;
+
+        result += ( val / 100.0f );
+      }
+    }
+  }
+  // Multiplier that stacks multiplicatively
+  else if( paramModifier >= Common::ParamModifier::StrengthPercent )
+  {
+    result = 1;
+
+    for( const auto& [ key, status ] : m_statusEffectMap )
+    {
+      for( const auto& [ mod, val ] : status->getModifiers() )
+      {
+        if( mod != paramModifier )
+          continue;
+
         result *= 1.0f + ( val / 100.0f );
-      else
+      }
+    }
+  }
+  // Flat modifier
+  else
+  {
+    result = 0;
+
+    for( const auto& [ key, status ] : m_statusEffectMap )
+    {
+      for( const auto& [ mod, val ] : status->getModifiers() )
+      {
+        if( mod != paramModifier )
+          continue;
+
         result += val;
+      }
     }
   }
 
