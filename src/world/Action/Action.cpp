@@ -622,7 +622,7 @@ void Action::Action::handleStatusEffects()
   {
     for( auto& status : m_lutEntry.statuses.caster )
     {
-      getActionResultBuilder()->applyStatusEffectSelf( status.id, status.duration, 0, status.modifiers, status.flag, true );
+      getActionResultBuilder()->applyStatusEffectSelf( status.id, status.duration, 0, status.modifiers, status.flag );
     }
   }
 
@@ -633,7 +633,7 @@ void Action::Action::handleStatusEffects()
     {
       for( auto& status : m_lutEntry.statuses.target )
       {
-        getActionResultBuilder()->applyStatusEffect( actor, status.id, status.duration, 0, status.modifiers, status.flag, true );
+        getActionResultBuilder()->applyStatusEffect( actor, status.id, status.duration, 0, status.modifiers, status.flag, status.canApplyMultipleTimes );
       }
 
       if( actor->getStatusEffectMap().size() > 0 )

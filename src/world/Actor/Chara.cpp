@@ -508,15 +508,6 @@ void Chara::addStatusEffectById( StatusEffect::StatusEffectPtr pStatus )
   addStatusEffect( pStatus );
 }
 
-/*! \param StatusEffectPtr to be applied to the actor */
-void Chara::addStatusEffectByIdIfNotExist( StatusEffect::StatusEffectPtr pStatus )
-{
-  if( hasStatusEffect( pStatus->getId() ) )
-    return;
-
-  addStatusEffect( pStatus );
-}
-
 int8_t Chara::getStatusEffectFreeSlot()
 {
   int8_t freeEffectSlot = -1;

@@ -86,33 +86,33 @@ void ActionResultBuilder::comboSucceed( Entity::CharaPtr& target )
   addResultToActor( target, nextResult );
 }
 
-void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool shouldOverride )
+void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool canApplyMultipleTimes )
 {
   ActionResultPtr nextResult = make_ActionResult( target );
-  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, shouldOverride );
+  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, canApplyMultipleTimes );
   addResultToActor( target, nextResult );
 }
 
 void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param,
-                                             std::vector< World::Action::StatusModifier > modifiers, uint32_t flag, bool shouldOverride )
+                                             std::vector< World::Action::StatusModifier > modifiers, uint32_t flag, bool canApplyMultipleTimes )
 {
   ActionResultPtr nextResult = make_ActionResult( target );
-  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, modifiers, flag, shouldOverride );
+  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, modifiers, flag, canApplyMultipleTimes );
   addResultToActor( target, nextResult );
 }
 
-void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, bool shouldOverride )
+void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param )
 {
   ActionResultPtr nextResult = make_ActionResult( m_sourceChara );
-  nextResult->applyStatusEffectSelf( statusId, duration, param, shouldOverride );
+  nextResult->applyStatusEffectSelf( statusId, duration, param );
   addResultToActor( m_sourceChara, nextResult );
 }
 
 void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, std::vector< World::Action::StatusModifier > modifiers,
-                                                 uint32_t flag, bool shouldOverride )
+                                                 uint32_t flag )
 {
   ActionResultPtr nextResult = make_ActionResult( m_sourceChara );
-  nextResult->applyStatusEffectSelf( statusId, duration, param, modifiers, flag, shouldOverride );
+  nextResult->applyStatusEffectSelf( statusId, duration, param, modifiers, flag );
   addResultToActor( m_sourceChara, nextResult );
 }
 

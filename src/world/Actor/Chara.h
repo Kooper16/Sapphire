@@ -142,9 +142,6 @@ namespace Sapphire::Entity
     // add a status effect by id
     void addStatusEffectById( StatusEffect::StatusEffectPtr pStatus );
 
-    // add a status effect by id if it doesn't exist
-    void addStatusEffectByIdIfNotExist( StatusEffect::StatusEffectPtr pStatus );
-
     // remove a status effect by id
     void removeSingleStatusEffectFromId( uint32_t id );
     /// End Status Effect Functions
