@@ -132,9 +132,11 @@ namespace Sapphire::World::Action
 
     std::pair< uint32_t, Common::ActionHitSeverityType > calcHealing( uint32_t potency );
 
-    int32_t calcDamageHate( Entity::CharaPtr source, uint32_t potency, uint32_t increasedEnmity = 1);
+    int32_t calcDamageHate( uint32_t damage );
 
-    int32_t calcHealingHate( Entity::CharaPtr source, uint32_t potency, bool isAbility );
+    int32_t calcHealingHate( Entity::CharaPtr target, uint32_t healing );
+
+    void applyHateToCombatants( Entity::CharaPtr combatantsFrom, int32_t hate );
 
 
     std::vector< Entity::CharaPtr >& getHitCharas();

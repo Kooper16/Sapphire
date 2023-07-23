@@ -586,6 +586,11 @@ bool BNpc::hateListHasActor( const Sapphire::Entity::CharaPtr& pChara )
                       [ pChara ]( const auto& entry ) { return entry->m_pChara == pChara; } );
 }
 
+std::set< std::shared_ptr< HateListEntry > > BNpc::getHateList()
+{
+  return m_hateList;
+}
+
 void BNpc::aggro( const Sapphire::Entity::CharaPtr& pChara )
 {
   auto& pRNGMgr = Common::Service< World::Manager::RNGMgr >::ref();

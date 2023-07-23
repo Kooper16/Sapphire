@@ -500,17 +500,51 @@ std::pair< uint32_t, Common::ActionHitSeverityType > Action::Action::calcHealing
   return Math::CalcStats::calcActionHealing( *m_pSource, potency, wepDmg );
 }
 
-int32_t Action::Action::calcDamageHate( Entity::CharaPtr source, uint32_t potency, uint32_t increasedEnmity /*= 1*/ )
+int32_t Action::Action::calcDamageHate( uint32_t damage )
 {
-  uint32_t hate = potency * increasedEnmity;
-  hate = hate * source->getModifier( Common::ParamModifier::EnmityPercent );
+  uint32_t hate = damage * m_aggroMultiplier;
+  hate = hate * m_pSource->getModifier( Common::ParamModifier::EnmityPercent );
 
   return hate;
 }
 
-int32_t Action::Action::calcHealingHate( Entity::CharaPtr source, uint32_t potency, bool isAbility )
+int32_t Action::Action::calcHealingHate( Entity::CharaPtr target, uint32_t healing )
 {
-  return 1;
+  uint32_t hate = healing;
+  if( m_category == Common::ActionCategory::Spell )
+    hate = hate / 2;
+  else
+    hate = hate * 3 / 5;
+
+  hate = hate * m_pSource->getModifier( Common::ParamModifier::EnmityPercent );
+
+  if( auto player = target->getAsPlayer() )
+    hate = hate / player->getActorIdToHateSlotMap().size();
+  else if( auto bnpc = target->getAsBNpc() )
+    hate = hate / bnpc->getHateList().size();
+
+  return hate;
+}
+
+void Action::Action::applyHateToCombatants( Entity::CharaPtr combatantsFrom, int32_t hate )
+{
+  if( auto player = combatantsFrom->getAsPlayer() )
+  {
+    for( auto& hateTargetId : player->getActorIdToHateSlotMap() )
+    {
+      Entity::GameObjectPtr hateTarget = player->lookupTargetById( hateTargetId.first );
+      if( auto enemy = hateTarget->getAsBNpc() )
+        enemy->onActionHostile( m_pSource, hate );
+    }
+  }
+  else if( auto bnpc = combatantsFrom->getAsBNpc() )
+  {
+    for( auto& hateTarget : bnpc->getHateList() )
+    {
+      if( auto enemy = hateTarget->m_pChara->getAsBNpc() )
+        enemy->onActionHostile( m_pSource, hate );
+    }
+  }
 }
 
 void Action::Action::buildActionResults()
@@ -559,7 +593,7 @@ void Action::Action::buildActionResults()
       auto dmg = calcDamage( isCorrectCombo() ? m_lutEntry.comboPotency : m_lutEntry.potency );
       m_actionResultBuilder->damage( m_pSource, actor, dmg.first, dmg.second );
 
-      auto hate = calcDamageHate( getSourceChara(), dmg.first );
+      auto hate = calcDamageHate( dmg.first );
       actor->onActionHostile( m_pSource, hate );
 
       if( isCorrectCombo() && shouldApplyComboSucceedEffect )
@@ -574,6 +608,9 @@ void Action::Action::buildActionResults()
         {
           auto heal = calcHealing( m_lutEntry.curePotency );
           m_actionResultBuilder->heal( actor, m_pSource, heal.first, heal.second, Common::ActionResultFlag::EffectOnSource );
+
+          //hate = calcHealingHate( actor, heal.first );
+          //applyHateToCombatants( actor, hate );
         }
 
         if( m_lutEntry.restoreMPPercentage > 0 && shouldRestoreMP )
@@ -590,6 +627,13 @@ void Action::Action::buildActionResults()
     {
       auto heal = calcHealing( m_lutEntry.curePotency );
       m_actionResultBuilder->heal( actor, actor, heal.first, heal.second );
+
+      auto hate = calcHealingHate( actor, heal.first );
+      if( auto player = getSourceChara()->getAsPlayer() )
+      {
+        Manager::PlayerMgr::sendDebug( *player, "Healing hate: {}", hate );
+      }
+      applyHateToCombatants( actor, hate );
 
       if( m_lutEntry.restoreMPPercentage > 0 && shouldRestoreMP )
       {
