@@ -86,17 +86,17 @@ void ActionResultBuilder::comboSucceed( Entity::CharaPtr& target )
   addResultToActor( target, nextResult );
 }
 
-void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool shouldOverride )
+void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool canApplyMultipleTimes )
 {
   ActionResultPtr nextResult = make_ActionResult( target );
-  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, shouldOverride );
+  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, canApplyMultipleTimes );
   addResultToActor( target, nextResult );
 }
 
-void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, bool shouldOverride )
+void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, bool canApplyMultipleTimes )
 {
   ActionResultPtr nextResult = make_ActionResult( m_sourceChara );
-  nextResult->applyStatusEffectSelf( statusId, duration, param, shouldOverride );
+  nextResult->applyStatusEffectSelf( statusId, duration, param, canApplyMultipleTimes );
   addResultToActor( m_sourceChara, nextResult );
 }
 

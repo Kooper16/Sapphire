@@ -492,7 +492,21 @@ void Chara::addStatusEffect( StatusEffect::StatusEffectPtr pEffect )
   auto& teriMgr = Common::Service< Manager::TerritoryMgr >::ref();
   auto pZone = teriMgr.getTerritoryByGuId( getTerritoryId() );
 
-  int8_t nextSlot = getStatusEffectFreeSlot();
+  // users always replace statuses applied by them
+  int8_t nextSlot = getStatusEffectSlotWithIdAndSource( pEffect->getId(), pEffect->getSrcActorId() );
+
+  if( nextSlot == -1 && !pEffect->getCanApplyMultipleTimes() )
+  {
+    nextSlot = getStatusEffectSlotWithId( pEffect->getId() );
+  }
+  if( nextSlot == -1 )
+  {
+    nextSlot = getStatusEffectFreeSlot();
+  }
+
+  // todo: replace different status if only one can be up at the same time (eg. SCH and AST shield)
+  // todo: only replace shield if current shield > new shield
+
   // if there is no slot left, do not add the effect
   if( nextSlot == -1 )
     return;
@@ -506,16 +520,6 @@ void Chara::addStatusEffect( StatusEffect::StatusEffectPtr pEffect )
 void Chara::addStatusEffectById( StatusEffect::StatusEffectPtr pStatus )
 {
   addStatusEffect( pStatus );
-}
-
-/*! \param StatusEffectPtr to be applied to the actor */
-void Chara::addStatusEffectByIdIfNotExist( StatusEffect::StatusEffectPtr pStatus )
-{
-  if( hasStatusEffect( pStatus->getId() ) )
-    return;
-
-  addStatusEffect( pStatus );
-
 }
 
 int8_t Chara::getStatusEffectFreeSlot()
@@ -641,6 +645,32 @@ void Chara::updateStatusEffects()
 bool Chara::hasStatusEffect( uint32_t id )
 {
   return m_statusEffectMap.find( id ) != m_statusEffectMap.end();
+}
+
+int8_t Chara::getStatusEffectSlotWithId( uint8_t id )
+{
+  for( const auto& effectIt : m_statusEffectMap )
+  {
+    if( effectIt.second->getId() == id )
+    {
+      return effectIt.first;
+    }
+  }
+
+  return -1;
+}
+
+int8_t Chara::getStatusEffectSlotWithIdAndSource( uint8_t statusId, uint32_t sourceId )
+{
+  for( const auto& effectIt : m_statusEffectMap )
+  {
+    if( effectIt.second->getId() == statusId && effectIt.second->getSrcActorId() == sourceId )
+    {
+      return effectIt.first;
+    }
+  }
+
+  return -1;
 }
 
 int64_t Chara::getLastUpdateTime() const

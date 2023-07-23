@@ -416,7 +416,7 @@ void DebugCommandMgr::add( char* data, Entity::Player& player, std::shared_ptr< 
 
     sscanf( params.c_str(), "%d %d %hu", &id, &duration, &param );
 
-    auto effect = StatusEffect::make_StatusEffect( id, player.getAsPlayer(), player.getAsPlayer(), duration, 3000 );
+    auto effect = StatusEffect::make_StatusEffect( id, player.getAsPlayer(), player.getAsPlayer(), duration, 3000, true );
     effect->setParam( param );
 
     player.addStatusEffect( effect );

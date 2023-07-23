@@ -11,7 +11,7 @@ class StatusEffect
 {
 public:
   StatusEffect( uint32_t id, Entity::CharaPtr sourceActor, Entity::CharaPtr targetActor,
-                uint32_t duration, uint32_t tickRate );
+                uint32_t duration, uint32_t tickRate, bool canApplyMultipleTimes );
 
   ~StatusEffect();
 
@@ -38,6 +38,10 @@ public:
 
   uint16_t getParam() const;
 
+  bool getCanApplyMultipleTimes() const;
+
+  void setCanApplyMultipleTimes( bool canApplyMultipleTimes );
+
   void setLastTick( uint64_t lastTick );
 
   void setParam( uint16_t param );
@@ -63,6 +67,7 @@ private:
   std::string m_name;
   uint8_t m_slot;
   std::pair< uint8_t, uint32_t > m_currTickEffect;
+  bool m_canApplyMultipleTimes;
 
 };
 

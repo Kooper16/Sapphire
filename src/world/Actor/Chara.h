@@ -114,6 +114,10 @@ namespace Sapphire::Entity
 
     bool hasStatusEffect( uint32_t id );
 
+    int8_t getStatusEffectSlotWithId( uint8_t id );
+
+    int8_t getStatusEffectSlotWithIdAndSource( uint8_t statusId, uint32_t sourceId );
+
     int8_t getStatusEffectFreeSlot();
 
     void statusEffectFreeSlot( uint8_t slotId );
@@ -133,9 +137,6 @@ namespace Sapphire::Entity
 
     // add a status effect by id
     void addStatusEffectById( StatusEffect::StatusEffectPtr pStatus );
-
-    // add a status effect by id if it doesn't exist
-    void addStatusEffectByIdIfNotExist( StatusEffect::StatusEffectPtr pStatus );
 
     // remove a status effect by id
     void removeSingleStatusEffectFromId( uint32_t id );

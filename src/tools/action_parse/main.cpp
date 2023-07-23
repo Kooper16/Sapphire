@@ -40,6 +40,8 @@ struct StatusModifier
 struct StatusEntry
 {
   uint16_t id;
+  int32_t duration;
+  bool canApplyMultipleTimes;
   std::vector< StatusModifier > modifiers;
 };
 

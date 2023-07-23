@@ -66,26 +66,24 @@ void ActionResult::comboSucceed()
   m_result.Type = CalcResultType::TypeComboHit;
 }
 
-void ActionResult::applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param, bool shouldOverride )
+void ActionResult::applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param, bool canApplyMultipleTimes )
 {
   m_result.Value = static_cast< int16_t >( id );
   m_result.Arg2 = param;
   m_result.Type = CalcResultType::TypeSetStatus;
 
-  m_bOverrideStatus = shouldOverride;
-  m_pStatus = StatusEffect::make_StatusEffect( id, source.getAsChara(), m_target, duration, 3000 );
+  m_pStatus = StatusEffect::make_StatusEffect( id, source.getAsChara(), m_target, duration, 3000, canApplyMultipleTimes );
   m_pStatus->setParam( param );
 }
 
-void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param, bool shouldOverride )
+void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param, bool canApplyMultipleTimes )
 {
   m_result.Value = static_cast< int16_t >( id );
   m_result.Arg2 = param;
   m_result.Type = CalcResultType::TypeSetStatusMe;
   m_result.Flag = static_cast< uint8_t >( ActionResultFlag::EffectOnSource );
 
-  m_bOverrideStatus = shouldOverride;
-  m_pStatus = StatusEffect::make_StatusEffect( id, m_target, m_target, duration, 3000 );
+  m_pStatus = StatusEffect::make_StatusEffect( id, m_target, m_target, duration, 3000, canApplyMultipleTimes );
   m_pStatus->setParam( param );
 }
 
@@ -136,10 +134,7 @@ void ActionResult::execute()
     case CalcResultType::TypeSetStatus:
     case CalcResultType::TypeSetStatusMe:
     {
-      if( !m_bOverrideStatus )
-        m_target->addStatusEffectByIdIfNotExist( m_pStatus );
-      else
-        m_target->addStatusEffectById( m_pStatus );
+      m_target->addStatusEffectById( m_pStatus );
       break;
     }
 

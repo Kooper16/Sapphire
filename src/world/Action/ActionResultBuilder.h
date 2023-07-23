@@ -25,8 +25,8 @@ namespace Sapphire::World::Action
 
     void comboSucceed( Entity::CharaPtr& target );
 
-    void applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool shouldOverride );
-    void applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, bool shouldOverride );
+    void applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool canApplyMultipleTimes );
+    void applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, bool canApplyMultipleTimes );
 
     void mount( Entity::CharaPtr& target, uint16_t mountId );
 

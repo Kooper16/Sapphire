@@ -18,14 +18,15 @@ using namespace Sapphire::Network::Packets;
 //using namespace Sapphire::Network::Packets::WorldPackets::Server;
 
 Sapphire::StatusEffect::StatusEffect::StatusEffect( uint32_t id, Entity::CharaPtr sourceActor, Entity::CharaPtr targetActor,
-                                                    uint32_t duration, uint32_t tickRate ) :
+                                                    uint32_t duration, uint32_t tickRate, bool canApplyMultipleTimes ) :
   m_id( id ),
   m_sourceActor( sourceActor ),
   m_targetActor( targetActor ),
   m_duration( duration ),
   m_startTime( 0 ),
   m_tickRate( tickRate ),
-  m_lastTick( 0 )
+  m_lastTick( 0 ),
+  m_canApplyMultipleTimes( canApplyMultipleTimes )
 {
   auto& exdData = Common::Service< Data::ExdData >::ref();
   auto entry = exdData.getRow< Excel::Status >( id );
@@ -123,6 +124,16 @@ uint64_t Sapphire::StatusEffect::StatusEffect::getLastTickMs() const
 uint64_t Sapphire::StatusEffect::StatusEffect::getStartTimeMs() const
 {
   return m_startTime;
+}
+
+bool Sapphire::StatusEffect::StatusEffect::getCanApplyMultipleTimes() const
+{
+  return m_canApplyMultipleTimes;
+}
+
+void Sapphire::StatusEffect::StatusEffect::setCanApplyMultipleTimes( bool canApplyMultipleTimes )
+{
+  m_canApplyMultipleTimes = canApplyMultipleTimes;
 }
 
 void Sapphire::StatusEffect::StatusEffect::setLastTick( uint64_t lastTick )
