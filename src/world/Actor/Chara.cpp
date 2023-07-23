@@ -492,7 +492,19 @@ void Chara::addStatusEffect( StatusEffect::StatusEffectPtr pEffect )
   auto& teriMgr = Common::Service< Manager::TerritoryMgr >::ref();
   auto pZone = teriMgr.getTerritoryByGuId( getTerritoryId() );
 
-  int8_t nextSlot = getStatusEffectFreeSlot();
+  // user always overwrites status effects that they applied
+  int8_t nextSlot = getStatusEffectSlotWithIdAndSource( pEffect->getId(), pEffect->getSrcActorId() );
+
+  if( nextSlot == -1 && !pEffect->getCanApplyMultipleTimes() )
+  {
+    nextSlot = getStatusEffectSlotWithId( pEffect->getId() );
+  }
+  if( nextSlot == -1 )
+  {
+    nextSlot = getStatusEffectFreeSlot();
+  }
+
+
   // if there is no slot left, do not add the effect
   if( nextSlot == -1 )
     return;
@@ -520,6 +532,32 @@ int8_t Chara::getStatusEffectFreeSlot()
 
   return freeEffectSlot;
 }
+
+int8_t Chara::getStatusEffectSlotWithIdAndSource( uint8_t statusId, uint32_t sourceId )
+{
+  for( const auto& effectIt : m_statusEffectMap )
+  {
+    if( effectIt.second->getId() == statusId && effectIt.second->getSrcActorId() == sourceId )
+    {
+      return effectIt.first;
+    }
+  }
+
+  return -1;
+}
+
+int8_t Chara::getStatusEffectSlotWithId( uint8_t statusId )
+{
+  for( const auto& effectIt : m_statusEffectMap )
+  {
+    if( effectIt.second->getId() == statusId )
+    {
+      return effectIt.first;
+    }
+  }
+  return -1;
+}
+
 
 void Chara::statusEffectFreeSlot( uint8_t slotId )
 {
