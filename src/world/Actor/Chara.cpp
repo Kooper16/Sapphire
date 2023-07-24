@@ -509,7 +509,11 @@ void Chara::addStatusEffect( StatusEffect::StatusEffectPtr pEffect )
   if( nextSlot == -1 )
     return;
 
+  if( auto player = getAsPlayer() )
+    Manager::PlayerMgr::sendDebug( *player, "Effect slot: {0}", nextSlot );
+
   pEffect->setSlot( nextSlot );
+  removeStatusEffect( nextSlot, false );
   m_statusEffectMap[ nextSlot ] = pEffect;
   pEffect->applyStatus();
 }
