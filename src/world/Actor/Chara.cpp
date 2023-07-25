@@ -492,16 +492,21 @@ void Chara::addStatusEffect( StatusEffect::StatusEffectPtr pEffect )
   auto& teriMgr = Common::Service< Manager::TerritoryMgr >::ref();
   auto pZone = teriMgr.getTerritoryByGuId( getTerritoryId() );
 
-  // user always overwrites status effects that they applied
-  int8_t nextSlot = getStatusEffectSlotWithIdAndSource( pEffect->getId(), pEffect->getSrcActorId() );
+  // use slot of effect if it is valid
+  int8_t nextSlot = pEffect->getSlot();
+  if( nextSlot < 0 )
+  {
+    // user always overwrites status effects that they applied
+    nextSlot = getStatusEffectSlotWithIdAndSource( pEffect->getId(), pEffect->getSrcActorId() );
 
-  if( nextSlot == -1 && !pEffect->getCanApplyMultipleTimes() )
-  {
-    nextSlot = getStatusEffectSlotWithId( pEffect->getId() );
-  }
-  if( nextSlot == -1 )
-  {
-    nextSlot = getStatusEffectFreeSlot();
+    if( nextSlot == -1 && !pEffect->getCanApplyMultipleTimes() )
+    {
+      nextSlot = getStatusEffectSlotWithId( pEffect->getId() );
+    }
+    if( nextSlot == -1 )
+    {
+      nextSlot = getStatusEffectFreeSlot();
+    }
   }
 
 
@@ -509,11 +514,9 @@ void Chara::addStatusEffect( StatusEffect::StatusEffectPtr pEffect )
   if( nextSlot == -1 )
     return;
 
-  if( auto player = getAsPlayer() )
-    Manager::PlayerMgr::sendDebug( *player, "Effect slot: {0}", nextSlot );
+  removeStatusEffect( nextSlot, false );
 
   pEffect->setSlot( nextSlot );
-  removeStatusEffect( nextSlot, false );
   m_statusEffectMap[ nextSlot ] = pEffect;
   pEffect->applyStatus();
 }

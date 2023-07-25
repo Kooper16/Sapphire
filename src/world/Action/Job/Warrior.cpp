@@ -32,34 +32,38 @@ void Warrior::handleWrath( Entity::Player& player, Action& action )
   auto effectToApply = Wrath;
   auto parry = 2;
   auto asChara = player.getAsChara();
+  int8_t slotId = -1;
 
   if( player.hasStatusEffect( Wrath ) )
   {
-    player.replaceSingleStatusEffectById( Wrath );
+    slotId = player.getStatusEffectSlotWithId( Wrath );
     effectToApply = WrathII;
     parry += 2;
   }
   else if( player.hasStatusEffect( WrathII ) )
   {
-    player.replaceSingleStatusEffectById( WrathII );
+    slotId = player.getStatusEffectSlotWithId( WrathII );
     effectToApply = WrathIII;
-    parry += 2;
+    parry += 4;
   }
   else if( player.hasStatusEffect( WrathIII ) )
   {
-    player.replaceSingleStatusEffectById( WrathIII );
+    slotId = player.getStatusEffectSlotWithId( WrathIII );
     effectToApply = WrathIV;
-    parry += 2;
+    parry += 6;
   }
   else if( player.hasStatusEffect( WrathIV ) )
   {
-    player.replaceSingleStatusEffectById( WrathIV );
+    slotId = player.getStatusEffectSlotWithId( WrathIV );
     effectToApply = Infuriated;
-    parry += 2;
+    parry += 8;
+  }
+  else if( player.hasStatusEffect( Infuriated ) )
+  {
+    slotId = player.getStatusEffectSlotWithId( Infuriated );
+    effectToApply = Infuriated;
+    parry += 8;
   }
 
-  if( !player.hasStatusEffect( Infuriated ) )
-  {
-    action.getActionResultBuilder()->applyStatusEffectSelf( effectToApply, 30000, 0, { StatusModifier{ Common::ParamModifier::ParryPercent, parry } }, 0 );
-  }
+  action.getActionResultBuilder()->applyStatusEffectSelf( effectToApply, 30000, 0, { StatusModifier{ Common::ParamModifier::ParryPercent, parry } }, 0, slotId );
 }

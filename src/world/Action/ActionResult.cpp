@@ -66,28 +66,30 @@ void ActionResult::comboSucceed()
   m_result.Type = CalcResultType::TypeComboHit;
 }
 
-void ActionResult::applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param, bool canApplyMultipleTimes )
+void ActionResult::applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param, uint8_t slotId, bool canApplyMultipleTimes )
 {
   m_result.Value = static_cast< int16_t >( id );
   m_result.Arg2 = param;
   m_result.Type = CalcResultType::TypeSetStatus;
 
   m_pStatus = Sapphire::StatusEffect::make_StatusEffect( id, source.getAsChara(), m_target, duration, 3000 );
+  m_pStatus->setSlot( slotId );
   m_pStatus->setParam( param );
 }
 
 void ActionResult::applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param,
-                                      std::vector< StatusModifier > modifiers, uint32_t flag, bool canApplyMultipleTimes )
+                                      std::vector< StatusModifier > modifiers, uint32_t flag, uint8_t slotId, bool canApplyMultipleTimes )
 {
   m_result.Value = static_cast< int16_t >( id );
   m_result.Arg2 = param;
   m_result.Type = CalcResultType::TypeSetStatus;
 
   m_pStatus = Sapphire::StatusEffect::make_StatusEffect( id, source.getAsChara(), m_target, duration, modifiers, flag, canApplyMultipleTimes, 3000 );
+  m_pStatus->setSlot( slotId );
   m_pStatus->setParam( param );
 }
 
-void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param )
+void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param, uint8_t slotId )
 {
   m_result.Value = static_cast< int16_t >( id );
   m_result.Arg2 = param;
@@ -95,11 +97,12 @@ void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t
   m_result.Flag = static_cast< uint8_t >( ActionResultFlag::EffectOnSource );
 
   m_pStatus = Sapphire::StatusEffect::make_StatusEffect( id, m_target, m_target, duration, 3000 );
+  m_pStatus->setSlot( slotId );
   m_pStatus->setParam( param );
 }
 
 void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param, std::vector< World::Action::StatusModifier > modifiers,
-                                          uint32_t flag )
+                                          uint32_t flag, uint8_t slotId )
 {
   m_result.Value = static_cast< int16_t >( id );
   m_result.Arg2 = param;
@@ -107,6 +110,7 @@ void ActionResult::applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t
   m_result.Flag = static_cast< uint8_t >( Common::ActionResultFlag::EffectOnSource );
 
   m_pStatus = Sapphire::StatusEffect::make_StatusEffect( id, m_target, m_target, duration, modifiers, flag, false, 3000 );
+  m_pStatus->setSlot( slotId );
   m_pStatus->setParam( param );
 }
 

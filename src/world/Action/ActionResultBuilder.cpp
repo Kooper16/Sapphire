@@ -86,33 +86,33 @@ void ActionResultBuilder::comboSucceed( Entity::CharaPtr& target )
   addResultToActor( target, nextResult );
 }
 
-void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, bool canApplyMultipleTimes )
+void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param, uint8_t slotId, bool canApplyMultipleTimes )
 {
   ActionResultPtr nextResult = make_ActionResult( target );
-  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, canApplyMultipleTimes );
+  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, slotId, canApplyMultipleTimes );
   addResultToActor( target, nextResult );
 }
 
 void ActionResultBuilder::applyStatusEffect( Entity::CharaPtr& target, uint16_t statusId, uint32_t duration, uint8_t param,
-                                             std::vector< World::Action::StatusModifier > modifiers, uint32_t flag, bool canApplyMultipleTimes )
+                                             std::vector< World::Action::StatusModifier > modifiers, uint32_t flag, uint8_t slotId, bool canApplyMultipleTimes )
 {
   ActionResultPtr nextResult = make_ActionResult( target );
-  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, modifiers, flag, canApplyMultipleTimes );
+  nextResult->applyStatusEffect( statusId, duration, *m_sourceChara, param, modifiers, flag, slotId, canApplyMultipleTimes );
   addResultToActor( target, nextResult );
 }
 
-void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param )
+void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, uint8_t slotId )
 {
   ActionResultPtr nextResult = make_ActionResult( m_sourceChara );
-  nextResult->applyStatusEffectSelf( statusId, duration, param );
+  nextResult->applyStatusEffectSelf( statusId, duration, param, slotId );
   addResultToActor( m_sourceChara, nextResult );
 }
 
 void ActionResultBuilder::applyStatusEffectSelf( uint16_t statusId, uint32_t duration, uint8_t param, std::vector< World::Action::StatusModifier > modifiers,
-                                                 uint32_t flag )
+                                                 uint32_t flag, uint8_t slotId )
 {
   ActionResultPtr nextResult = make_ActionResult( m_sourceChara );
-  nextResult->applyStatusEffectSelf( statusId, duration, param, modifiers, flag );
+  nextResult->applyStatusEffectSelf( statusId, duration, param, modifiers, flag, slotId );
   addResultToActor( m_sourceChara, nextResult );
 }
 

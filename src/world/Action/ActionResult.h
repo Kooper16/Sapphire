@@ -20,12 +20,12 @@ namespace Sapphire::World::Action
     void restoreMP( uint32_t amount, Common::ActionResultFlag flag = Common::ActionResultFlag::None );
     void startCombo( uint16_t actionId );
     void comboSucceed();
-    void applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param, bool canApplyMultipleTimes );
+    void applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param, uint8_t slotId, bool canApplyMultipleTimes );
     void applyStatusEffect( uint32_t id, int32_t duration, Entity::Chara& source, uint8_t param,
-                            std::vector< World::Action::StatusModifier > modifiers, uint32_t flag, bool canApplyMultipleTimes );
-    void applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param );
+                            std::vector< World::Action::StatusModifier > modifiers, uint32_t flag, uint8_t slotId, bool canApplyMultipleTimes );
+    void applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param, uint8_t slotId );
     void applyStatusEffectSelf( uint32_t id, int32_t duration, uint8_t param, std::vector< World::Action::StatusModifier > modifiers,
-                                uint32_t flag );
+                                uint32_t flag, uint8_t slotId );
     void mount( uint16_t mountId );
 
     Entity::CharaPtr getTarget() const;
